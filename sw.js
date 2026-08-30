@@ -1,8 +1,8 @@
-/* Titraus service worker - versio d8492c9e1f15
+/* Titraus service worker - versio e9dd88996105
    Välimuisti ensin, päivitys taustalla: sovellus avautuu ilman verkkoa, ja uusi
    versio otetaan käyttöön seuraavalla avauksella. Ei koskaan pyydä mitään
    muualta kuin omasta osoitteestaan. */
-var CACHE = "titraus-d8492c9e1f15";
+var CACHE = "titraus-e9dd88996105";
 var FILES = ["./", "./index.html", "./manifest.webmanifest",
   "./icons/icon-180.png", "./icons/icon-192.png", "./icons/icon-512.png", "./icons/icon-512-maskable.png"];
 

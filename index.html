@@ -4105,13 +4105,26 @@ function ohitaAnnos(spec){
   renderAll();
 }
 
+/* Levystä tullut napautus ei saa koskaan valua sivun yleiseen käsittelijään.
+   Alkuperää EI voi enää päätellä kuplimisvaiheessa: levy piirtää runkonsa uudelleen
+   heti kun on käsitellyt napautuksen, jolloin napautettu solmu on irrotettu DOMista
+   eikä el("sheet").contains(t) pidä enää paikkaansa. Silloin yleinen käsittelijä ajoi
+   saman toiminnon toiseen kertaan ja kumosi sen: levystä merkitty oire lisättiin ja
+   poistettiin samalla napautuksella, eikä yksikään merkintä tallentunut. Siksi
+   alkuperä kirjataan kaappausvaiheessa, ennen kuin mikään ehtii piirtää uudelleen. */
+var _klikLevysta = false;
+document.addEventListener("click", function(e){
+  var n = e.target;
+  _klikLevysta = !!(n && n.nodeType === 1 && el("sheet").contains(n));
+}, true);
+
 document.addEventListener("click", function(e){
   var t = e.target.closest("[data-tab],[data-log],[data-dose-sheet],[data-checkin],[data-evening],[data-se],[data-se-all],[data-se-none],"
     +"[data-offset-now],[data-open-event],[data-edit-dose],[data-slot],[data-fill],[data-skip],[data-day],[data-go],[data-snooze],"
     +"[data-range],[data-print],[data-copytext],[data-copyjson],[data-download],[data-import],[data-wipe],[data-theme],[data-hide],"
     +"[data-wd],[data-copytimes],[data-sleep],[data-hist-close],[data-hist-evening],[data-hist-dt],[data-hist-add]");
   if(!t) return;
-  if(el("sheet").contains(t)) return;
+  if(_klikLevysta || el("sheet").contains(t)) return;
 
   if(t.hasAttribute("data-tab")){ setView(t.getAttribute("data-tab")); return; }
   if(t.hasAttribute("data-go")){ setView(t.getAttribute("data-go")); return; }
